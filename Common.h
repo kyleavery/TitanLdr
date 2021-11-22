@@ -18,6 +18,11 @@
 #include "Native.h"
 #include "Macros.h"
 
+typedef struct __attribute__((packed))
+{
+    HANDLE hHeap;
+} DATA, *PDATA ;
+
 /* Include Library */
 #include "Labels.h"
 #include "Hash.h"
@@ -26,4 +31,5 @@
 #include "Pe.h"
 
 /* Include Hooks! */
-#include "hooks/DnsQuery_A.h"
+#include "hooks/GetProcessHeap.h"
+#include "hooks/Sleep.h"

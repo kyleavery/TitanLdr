@@ -16,11 +16,7 @@ GLOBAL _Hooks
 [SECTION .text$C]
 
 _Hooks:
-	;;
-	;; Arbitrary symbol to reference as
-	;; start of hook pages
-	;;
-	nop
+	dq 0
 
 [SECTION .text$F]
 

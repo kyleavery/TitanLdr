@@ -22422,9 +22422,29 @@ IMPORT_FN wchar_t * __cdecl wcsncpy(wchar_t *dest, const wchar_t *source, size_t
 
 #endif /* _NTDLL_ */
 
+/* Heap Encryption */
+
+# define RTL_PROCESS_HEAP_ENTRY_BUSY         0x0001
+
+typedef struct _USTRING
+{
+    DWORD len;
+    DWORD maxlen;
+    unsigned char *str;
+} USTRING, *PUSTRING;
+
+NTSTATUS
+WINAPI
+SystemFunction032(
+	PUSTRING pData,
+	PUSTRING pKey
+	);
+
 NTSYSAPI
 ULONG
 NTAPI
 RtlRandomEx(
     PULONG Seed
 	);
+
+/* Heap Encryption */
