@@ -27,7 +27,7 @@ D_SEC( D ) VOID HeapEncryptDecrypt( _In_ PAPI Api, _In_ unsigned char enckey[32]
 
     while ( NT_SUCCESS(Api->RtlWalkHeap(GetProcessHeap_Hook(), &entry)) )
     {
-        if (entry.Flags == RTL_PROCESS_HEAP_ENTRY_BUSY)
+        if ( ( entry.Flags && RTL_PROCESS_HEAP_ENTRY_BUSY ) != 0 )
         {
             USTRING key;
             USTRING data;
